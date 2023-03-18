@@ -20,6 +20,7 @@ namespace lab02
         private string _chinesseSign;
         private bool _isBirthday;
         private int _age;
+        private string _email;
         private bool _isEnabled = true;
         private Visibility _loaderVisibility = Visibility.Collapsed;
 
@@ -86,6 +87,7 @@ namespace lab02
             set
             {
                 _person.FullName = value;
+                OnPropertyChanged();
             }
             get
             {
@@ -97,11 +99,13 @@ namespace lab02
         {
             get
             {
-                return _person.DateBirth;
+                return _person.DateBirth.Date;
             }
             set
             {
                 _person.DateBirth = value;
+                OnPropertyChanged();
+
             }
         }
 
@@ -165,7 +169,6 @@ namespace lab02
             {
                 _person.EmailAdress = value;
                 OnPropertyChanged();
-
             }
         }
 
@@ -239,24 +242,25 @@ namespace lab02
                 MessageBox.Show("The date is wrong");
                 return false;
             }
-            else if (!EmailAdress.Contains("@"))
-            {
-                MessageBox.Show("Invalid Email");
-                return false;
-            }
+
             return true;
         }
 
         public void showEmail()
         {
             Thread.Sleep(1000);
-            EmailAdress = "123@123";
+            EmailAdress = _person.EmailAdress;
+        }
+        public void showDatebirth()
+        {
+            Thread.Sleep(1000);
+            DateBirth = selectedDateFromUser.Date;
         }
 
         public void showFullName()
         {
             Thread.Sleep(1000);
-            FullName = "Viktor Sovyak";
+            FullName = $"{_person.FirstName} {_person.LastName}";
         }
         public void countAgeOfUser()
         {
@@ -269,7 +273,6 @@ namespace lab02
             }
             Age = age;
         }
-
 
         public void countWestAstroSign()
         {
@@ -357,6 +360,7 @@ namespace lab02
                 try
                 {
                     await Task.Run(() => countAgeOfUser());
+                    await Task.Run(() => showDatebirth());
                     await Task.Run(() => showFullName());
                     await Task.Run(() => showEmail());
                     await Task.Run(() => countWestAstroSign());

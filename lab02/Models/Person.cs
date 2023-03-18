@@ -11,8 +11,8 @@ namespace lab02
         private string _fullName;
         private string _emailAdress;
         private DateTime _dateBirth;
-        readonly DateTime defaultDateBirth = new DateTime(2001, 01, 01);
-        readonly string defaultEmail = "empty@email.com";
+        DateTime defaultDateBirth = new DateTime(2001, 01, 01);
+        string defaultEmail = "empty@email.com";
 
         public string FirstName
         {
@@ -50,6 +50,7 @@ namespace lab02
             }
 
         }
+        
         public string EmailAdress
         {
             get
@@ -65,7 +66,7 @@ namespace lab02
         {
             get
             {
-                return _dateBirth;
+                return _dateBirth.Date;
             }
             set
             {
