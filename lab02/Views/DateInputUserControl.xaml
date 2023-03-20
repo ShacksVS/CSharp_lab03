@@ -43,7 +43,7 @@
         <TextBlock Text="Your name" Grid.Row="6" Foreground="Gray" FontSize="9"/>
         <TextBlock Name="TbFullName" Text ="{Binding FullName}" Grid.Row="7" Margin="0,0,0,20"/>
         <TextBlock Text="Your email:" Grid.Row="6" Foreground="Gray" Grid.Column="1" FontSize="9"/>
-        <TextBlock Name="TbEmail" Text ="{Binding EmailAdress, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="1" Margin="0,0,0,20"/>
+        <TextBlock Name="TbEmail" Text ="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="1" Margin="0,0,0,20"/>
         <TextBlock Name="WestSign" Grid.Row="9" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Height="25" Margin="5,10,5,5" Text ="{Binding SunSign, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock Name="EastSign" Grid.Row="9" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Height="25" Margin="5, 10, 5, 5"  Text ="{Binding ChineseSign, UpdateSourceTrigger=PropertyChanged}"/>
         <Button Name="BExit" Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="25" Margin="5" Content="Exit" Command="{Binding ExitCommand}"/>

@@ -171,6 +171,18 @@ namespace lab02
                 OnPropertyChanged();
             }
         }
+        public string Email
+        {
+            get
+            {
+                return _email;
+            }
+            set
+            {
+                _email = value;
+                OnPropertyChanged();
+            }
+        }
 
         public int Age
         {
@@ -249,7 +261,7 @@ namespace lab02
         public void showEmail()
         {
             Thread.Sleep(1000);
-            EmailAdress = _person.EmailAdress;
+            Email = _person.EmailAdress;
         }
         public void showDatebirth()
         {
