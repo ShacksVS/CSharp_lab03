@@ -6,11 +6,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using CSharp_lab02;
+using System.Windows.Media.Animation;
+using System.Text.RegularExpressions;
 
 namespace lab02
 {
     public class DateInfo : INotifyPropertyChanged, ILoaderOwner
     {
+        #region Fields
         private Person _person = new Person();
         private DateTime selectedDateFromUser;
         private RelayCommand<object> _proceedCommand;
@@ -49,15 +52,7 @@ namespace lab02
                 OnPropertyChanged();
             }
         }
-
-        public RelayCommand<object> ProceedCommand
-        {
-            get
-            {
-                return _proceedCommand ?? new RelayCommand<object>(_ => proceed(), CanExecute);
-            }
-        }
-
+#endregion
         public string FirstName
         {
             get
@@ -198,7 +193,7 @@ namespace lab02
         }
         private bool CanExecute(object obj)
         {
-            return !String.IsNullOrWhiteSpace(_person.FirstName) && !String.IsNullOrWhiteSpace(_person.LastName);
+            return !String.IsNullOrWhiteSpace(_person.FirstName) && !String.IsNullOrWhiteSpace(_person.LastName) && !String.IsNullOrWhiteSpace(_person.EmailAdress);
         }
 
         enum WestSigns
@@ -243,19 +238,6 @@ namespace lab02
             {
                 selectedDateFromUser = value;
             }
-        }
-
-        public bool dateValid()
-        {
-            DateTime todayDate = DateTime.Today;
-            int difference = todayDate.Year - SelectedDateFromUser.Year;
-            if (difference > 135 || difference < 0)
-            {
-                MessageBox.Show("The date is wrong");
-                return false;
-            }
-
-            return true;
         }
 
         public void showEmail()
@@ -364,9 +346,42 @@ namespace lab02
             else IsBirthday = false;
         }
 
+
+        public bool dateValid()
+        {
+            DateTime todayDate = DateTime.Today;
+            int difference = todayDate.Year - SelectedDateFromUser.Year;
+            if (difference > 135)
+            {
+                throw new CSharp_lab02.Tools.Exceptions.DateFarInPast(difference);
+            }
+            else if (difference < 0)
+            {
+                throw new CSharp_lab02.Tools.Exceptions.DateInFuture(difference);
+            }
+            else if (!_person.EmailAdress.Contains("@"))
+            {
+                throw new CSharp_lab02.Tools.Exceptions.WrongEmail(_person.EmailAdress);
+            }
+
+            return true;
+        }
+
         private async void proceed()
         {
-            bool flag = dateValid();
+            bool flag = false;
+            try
+            {
+                flag = dateValid();
+            }
+            catch (Exception ex)
+            {
+                if (ex is CSharp_lab02.Tools.Exceptions.DateFarInPast || ex is CSharp_lab02.Tools.Exceptions.DateInFuture || ex is CSharp_lab02.Tools.Exceptions.WrongEmail)
+                {
+                    MessageBox.Show($"Exception: {ex.Message}");
+                }
+            }
+            
             if (flag)
             {
                 try
@@ -385,6 +400,14 @@ namespace lab02
                     MessageBox.Show($"Something went wrong: {ex.Message}");
                     return;
                 }
+            }
+        }
+
+        public RelayCommand<object> ProceedCommand
+        {
+            get
+            {
+                return _proceedCommand ?? new RelayCommand<object>(_ => proceed(), CanExecute);
             }
         }
 
