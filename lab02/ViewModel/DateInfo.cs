@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using CSharp_lab02;
 using System.Windows.Media.Animation;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace lab02
 {
@@ -351,6 +352,7 @@ namespace lab02
         {
             DateTime todayDate = DateTime.Today;
             int difference = todayDate.Year - SelectedDateFromUser.Year;
+            Regex regex = new Regex("^\\S+@\\S+\\.\\S+$");
             if (difference > 135)
             {
                 throw new CSharp_lab02.Tools.Exceptions.DateFarInPast(difference);
@@ -359,7 +361,12 @@ namespace lab02
             {
                 throw new CSharp_lab02.Tools.Exceptions.DateInFuture(difference);
             }
-            else if (!_person.EmailAdress.Contains("@"))
+            
+            else if (_person.FirstName.Any(char.IsDigit) || _person.LastName.Any(char.IsDigit))
+            {
+                throw new CSharp_lab02.Tools.Exceptions.BadName(_person.EmailAdress);
+            }
+            else if (!regex.IsMatch(_person.EmailAdress))
             {
                 throw new CSharp_lab02.Tools.Exceptions.WrongEmail(_person.EmailAdress);
             }
@@ -376,7 +383,7 @@ namespace lab02
             }
             catch (Exception ex)
             {
-                if (ex is CSharp_lab02.Tools.Exceptions.DateFarInPast || ex is CSharp_lab02.Tools.Exceptions.DateInFuture || ex is CSharp_lab02.Tools.Exceptions.WrongEmail)
+                if (ex is CSharp_lab02.Tools.Exceptions.DateFarInPast || ex is CSharp_lab02.Tools.Exceptions.DateInFuture || ex is CSharp_lab02.Tools.Exceptions.WrongEmail || ex is CSharp_lab02.Tools.Exceptions.BadName)
                 {
                     MessageBox.Show($"Exception: {ex.Message}");
                 }
